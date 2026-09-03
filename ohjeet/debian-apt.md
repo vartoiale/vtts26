@@ -152,9 +152,9 @@ Todennäköisesti jokainen rivi avatussa tiedostossa alkaa `#`-merkillä. Tämä
 Tiedostosta pitäisi löytyä seuraavat kommentoimattomat rivit (tai jotain niiden näköistä kommentoimatonta):
 
 ```
-deb http://deb.debian.org/debian trixie main
-deb http://security.debian.org/debian-security trixie-security main
-deb http://deb.debian.org/debian-updates trixie-updates main
+deb https://deb.debian.org/debian trixie main
+deb https://security.debian.org/debian-security trixie-security main
+deb https://deb.debian.org/debian trixie-updates main
 ```
 
 Jos niitä ei löydy, lisää ne itse.
