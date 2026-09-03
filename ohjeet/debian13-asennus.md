@@ -178,3 +178,7 @@ Koneesi käynnistyttyä kirjautumisnäkymään, kirjaudu koneelle käyttäen kä
 
 Jos olet unohtanut määrittämäsi salasanan, ei hätää, voit tehdä asennuksen uudelleen alusta. 
 Varmista kuitenkin tällöin biosista, että käynnistysjärjestyksessä usb-tikkusi on debian-asennusta edellä, jotta saat aloitettua asennuksen uudestaan.
+
+## Seuraavaksi: Ohje: Debianin `apt`-komentorivityökalu
+
+Seuraavaksi jatketaan tutustumalla debianin `apt`-komentorivityökaluun, jolla asennetaan ohjelmia debian-pohjaisissa linux-käyttöjärjestelmissä: [ohje: apt](./debian-apt.md) 
