@@ -168,4 +168,4 @@ Voit halutessasi lukea lisää sources.list -tiedostosta debianin dokumentaatios
 
 ## Seuraavaksi: asennetaan wordpress
 
-Nyt sinun pitäisi olla valmis asentamaan wordpress: [ohje: wordpress-asennus debian 13:ssa](./debian13-wordpress-asennus.md)
+Nyt sinun pitäisi olla valmis asentamaan wordpress: [ohje: wordpress-asennus debian 13:ssa](./04-debian13-wordpress-asennus.md)
