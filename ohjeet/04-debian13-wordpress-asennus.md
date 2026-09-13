@@ -6,7 +6,17 @@ Debian tarjoaa oman ohjeen wordpressin asentamiseen:
 
 * [wordpress](https://wiki.debian.org/WordPress?pow_referer=https%3A%2F%2Fwww.google.com%2F)-ohje
 
-Huomaa kuitenkin tehdä seuraavat muutokset:
+Huomaa, että `Upgrading the installed wordpress version`-otsikon alla alkaa ohjeissa seuraava osio,
+eikä sitä pidemmälle tarvitse mennä.
+
+Kun olet päässyt yllä olevaan otsikkoon asti,
+voit avata wordpressin selaimessa (paikallisesti kehitettäessä osoitteessa `http://localhost`).
+
+Alta löydät vielä muutokset, jotka sinun tulee tehdä paikallisesti wordpressiä asentaessasi.
+
+## Paikalliseen kehitykseen tarvittavat muutokset
+
+Kun konfiguroit wordpressin paikallista kehitystä varten, sinun tulee tehdä seuraavat muutokset:
 
 1. Lisää jokaisen komennon alkuun `sudo`-komento.
 2. Vastaa ohjeiden mukaisesti `mysql_secure_installation`-komennon kyselyihin.
