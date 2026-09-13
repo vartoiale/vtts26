@@ -5,3 +5,122 @@
 Debian tarjoaa oman ohjeen wordpressin asentamiseen:
 
 * [wordpress](https://wiki.debian.org/WordPress?pow_referer=https%3A%2F%2Fwww.google.com%2F)-ohje
+
+Huomaa kuitenkin tehdä seuraavat muutokset:
+
+1. Lisää jokaisen komennon alkuun `sudo`-komento.
+2. Vastaa ohjeiden mukaisesti `mysql_secure_installation`-komennon kyselyihin.
+3. Käytä apachen `/etc/apache2/sites-available/wp.conf`-konfiguraatiotiedostoa täyttäessä paikallisen asennuksen yhteydessä `localhost`-arvoa ja `.local`-osoitetta.
+4. Nimeä debianin wordpressin konfiguraatiotiedosto nimellä: `/etc/wordpress/config-localhost.php`, jotta sitä käytetään kun sivu avataan `http://localhost` -url-osoitteella.
+5. Aseta debianin wordpressin konfiguraatiotiedostoon sama salasana, jota myöhemmin käytät tietokantoja luodessa `~/wp.sql`-tiedostossa. 
+
+Näistä lisää vielä alla.
+
+### Muutokset ohjeisiin
+
+Alla vielä tarkemmin jokainen ohje.
+
+#### 1. käytä `sudo`-komentoa
+
+Debianin wordpress-ohjeissa oletetaan, että komennot ajetaan pääkäyttäjällä (engl. "root" tai "superuser").
+Tämän takia yhdessäkään komennossa ei käytetä alussa `sudo`-komentoa.
+
+Huomaamme jo heti alusta, että ensimmäisenä ohjeissa käytetään koko järjestelmää muokkaavaa `apt`-pakettienhallintakomentoa, ilman `sudo`-komentoa.
+Kuten aiemmin totesimme, `apt`-komennon käyttö vaatii pääkäyttäjän oikeudet, koska sillä tehdään muutoksia koko järjestelmään.
+Tämän perusteella voimme olettaa, että komentoa ajetaan pääkäyttäjänä ja, että myös muissa komennoissa tulee käyttää `sudo`-komentoa, jos niitä ei ajeta suoraan pääkäyttäjänä.
+
+Koska haluamme välttää pääkäyttäjän roolin ottamista pysyvästi, käytämme jokaisen rivin edessä `sudo`-komentoa.
+
+Huomaa myös, että `|`-putkioperaation kohdalla joudumme lisäämään `sudo`-komennon myös putken oikeanpuoleiseen komentoon.
+
+Kertauksena, `a | b`-putkioperaatio yhdisti kaksi komentoa (tässä `a` ja `b`) siten, että ensimmäisen `a`-komennon tuloste ohjataan jälkimmäisen `b`-komennon viimeiseksi parametriksi.
+
+Tällöin, jotta voimme ohjeiden mukaisesti ajaa jälkimmäisen `b`-komennon vaadittavilla pääkäyttäjän oikeuksilla, tulee sen eteen lisätä taas `sudo`-komento.
+
+Näin ollen `a | b`-komennon tulisi näyttää pääkäyttäjän oikeuksilla ajettuna seuraavalta `sudo a | sudo b`.
+
+Debianin wordpress-ohjeessa vaihdamme rivin:
+
+```sh
+cat ~/wp.sql | mysql --defaults-extra-file=/etc/mysql/debian.cnf
+```
+
+muotoon:
+
+```sh
+sudo cat ~/wp.sql | sudo mysql --defaults-extra-file=/etc/mysql/debian.cnf
+```
+
+Oikeastaan ensimmäinen `sudo`-komento on turha, ja parempi olisi:
+
+```sh
+cat ~/wp.sql | sudo mysql --defaults-extra-file=/etc/mysql/debian.cnf
+```
+
+#### 2. Vastaa ohjeiden mukaisesti `mysql_secure_installation`-komennon kyselyihin.
+
+`mysql_secure_installation`-komennon kysymykset saattavat aluksi tuntua monimutkaisilta.
+Tästä ei kannata hätääntyä. 
+Komento neuvoo kysymys kerrallaan, mitä käyttäjän tulee vastata.
+
+Käytännössä vastaustapoja on vain kaksi:
+
+1. Kun `mysql_secure_installation` sanoo, että voit käyttää `n`-vaihtoehtoa, vastaa kysymykseen `n`-vaihtoehdolla. (suomeksi myös `e`-vaihtoehto käy)
+2. Muissa tapauksissa valitse oletusvaihtoehto painamalla enter-näppäintä.
+
+#### 3. Käytä apachen `/etc/apache2/sites-available/wp.conf`-konfiguraatiotiedostoa täyttäessä paikallisen asennuksen yhteydessä `localhost`-arvoa ja `.local`-osoitetta.
+
+Apachen `/etc/apache2/sites-available/wp.conf`-konfiguraatiotiedostoa täytettäessä tulee tehdä kaksi muutosta, kun ajetaan koodia paikallisessa kehitysympäristössä:
+
+1. Rivillä 2, aseta `ServerName`-avaimen arvoksi `localhost`.
+2. Rivillä 4, aseta `ServerAdmin`-avaimen arvoksi paikallinen osoite, esim `a@b.local`
+
+Ensimmäinen muutos tehdään, jotta worpress toimii paikallisesti localhost-osoitteella.
+
+Jälkimmäinen muutos tehdään, jottei paikallista kehitysympäristöä ajettaessa virheistä missään tapauksessa lähetetä viestiä todellisiin sähköpostiosoitteisiin.
+
+##### Lyhyesti `localhost`-osoitteesta
+
+`localhost` on url-osoite, joka on sovittu osoittamaan paikalliseen koneeseen.
+Eli siis kun avaamme läppärillämme `localhost`-osoitteen selaimessa, selain tietää, että haluamme ladata sisällön samalla läppärillä pyörivältä palvelinohjelmistolta.
+`localhost` on siis koodi sana, jolla voimme kertoa selaimelle, tai muulle ohjelmalle, että palvelin löytyy omalta koneelta, eikä sitä tarvitse lähteä etsimään internetistä.
+Sanallista `localhost`-osoitetta vastaa ip4-numeroavaruudessa ip-osoite: `127.0.0.1`.
+
+##### Lyhyesti `.local`-osoitteesta
+
+Samalla tavalla kuin `localhost` on varattu omalle koneelle, `.local`-tld on varattu käytettäväksi lähiverkossa. 
+Toisin sanoen, kukaan ei ole voinut ostaa omakseen keksimäämme kuvitteellista `a@b.local`-sähköpostiosoitetta.
+Eikä wordpress näin ollen pysty lähettämään sähköpostia vahingossakaan väärille tahoille paikalliseen asennukseemme liittyen.
+
+Jos ajat wordpressiä tuotantoympäristössä, kyseiseen `ServerAdmin`-kohtaan kannattaa laittaa oikea sähköpostiosoite.
+
+`.local` on kuitenkin vähän ongelmallisempi, ja microsoft, windowsin kehittäjänä, ei suosittele sen käyttöä. 
+(Tästä löytyy paremmin tietoa alla olevasta wikipedia-artikkelista.)
+
+Meidän tapauksessamme `.local`-osoitteen käyttö on kuitenkin vähän hyväksyttävämpää, 
+koska emme oikeasti suunnittele luovamme oikeaa palvelinta lähiverkkoon, joka vastaisi keksimäämme `a@b.local`-osoitetta, 
+vaan haluamme vain, ettei sähköposteja lähde lähiverkon ulkopuolelle.
+
+Voit lukea lisää `.local`-osoitteesta [wikipediasta](https://en.wikipedia.org/wiki/.local).
+
+#### 4. Nimeä debianin wordpressin konfiguraatiotiedosto nimellä: `/etc/wordpress/config-localhost.php`, jotta sitä käytetään kun sivu avataan `http://localhost` -url-osoitteella.
+
+Debian valitsee oikean konfiguraatiotiedoston wordpress:ille sen mukaan, mistä osoitteesta wordpress:iä yritetään avata.
+
+Wordpressin konfiguraatiotiedostot ovat debianissa nimeltään muotoa: `/etc/wordpress/config-<osoite>.php`, jossa `<osoite>` on tiedoston nimeen kovakoodattu osoite.
+
+Koska paikallisessa kehitysympäristössä yritämme avata wordpressiä osoitteesta `http://localhost`, tulee meidän luoda sitä vastaava konfiguraatiotiedosto nimellä `/etc/wordpress/config-localhost.php`.
+
+Jos emme näin tee, wordpress ei osaa löytää konfiguraatiotiedostoamme, kun yritämme kutsua wordpressiä osoitteesta `http://localhost`.
+
+Toinen vaihtoehto olisi luoda yleisempi konfiguraationimellä `/etc/wordpress/config-default.php`.
+Yleensä kuitenkin kannattaa käyttää mahdollisimman tarkkaa nimeä.
+Tällöin tarkempi nimi `/etc/wordpress/config-localhost.php` on parempi kuin yleisempi nimi `/etc/wordpress/config-default.php`.
+
+#### 5. Aseta debianin wordpressin konfiguraatiotiedostoon sama salasana, jota myöhemmin käytät tietokantoja luodessa `~/wp.sql`-tiedostossa. 
+
+Lopuksi wordpressin `/etc/wordpress/config-localhost.php`-konfiguraatiotiedostossa ja tietokanna määrittävässä `~/wp.sql`-tiedostoissa määritetään salasanat järjestelmälle.
+
+Vaihda molempiin tiedostoihin pienellä kirjoitetun `password`-sanan tilalle haluamasi salasana. 
+
+Huomaa, että salasana tulee asettaa `~/wp.sql`-tiedostossa kahteen eri paikkaan.
