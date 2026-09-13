@@ -42,8 +42,78 @@ Lista käsitellyistä komennoista:
 
 Tarvitset näitä komentoja, komentorivillä liikkumiseen ja työskentelyyn.
 
-Kyseisten komentojen hallinta on esitietona seuraavissa ohjeissa.
+## Komentojen ketjuttaminen
+
+Komentorivillä on mahdollista ajaa yhdellä rivillä useampi komento mm. seuraavasti:
+
+* kahden komennon yhdistäminen yhdelle riville `&&`-operaattorilla
+* tulosteen ohjaaminen ensimmäisestä komennosta toiseen `|`-putkioperaattorilla
+
+Näistä alla vähän lisää.
+
+### kahden komennon yhdistäminen yhdelle riville `&&`-operaattorilla
+
+Välillä halutaan kirjoittaa yhtenä rivinä kaksi eri komentoa siten, että ensimmäisen komennon tapahduttua ajetaan toinen komento.
+
+Oletetaan, että meillä on kaksi eri komentoa:
+
+```sh
+sudo apt update
+```
+
+ja
+
+```sh
+sudo apt upgrade
+```
+
+Voimme halutessamme määrittää yhdellä rivillä, että nämä komennot ajetaan peräkkäin.
+
+Se tapahtuu käyttämällä välissä `&&`-operaattoria:
+
+```sh
+sudo apt update && sudo apt upgrade
+```
+
+Tässä on hyvä huomioida, että jälkimmäinen komento ajetaan vain jos ensimmäisen komennon suoritus onnistuu.
+`&&`-operaattorilla voidaan siis estää jälkimmäistä komentoa tapahtumasta, jos ensimmäinen komento epäonnistuu.
+
+### tulosteen ohjaaminen ensimmäisestä komennosta toiseen `|`-putkioperaattorilla
+
+Jos kuitenkin haluamme ensin suorittaa yhden komennon, ja sen jälkeen ohjata sen komennon ruudulle tulostaman tiedon toisen komennon parametriksi,
+käytämme `|`-putkioperaattoria.
+
+Tyypillisesti putkioperaattoria käytettäessä ensimmäisellä komennolla luetaan tietoa tiedostosta,
+ja toisella komennolla asetetaan se parametriksi.
+
+Oletetaan, että meillä on `foo.txt`-tiedosto, ja sillä sisältö:
+
+```
+tiedosto.txt
+```
+
+tällöin voimme putkioperaattorilla ohjata tiedoston sisällön toiselle komennolle seuraavasti:
+
+```sh
+cat foo.txt | nano
+```
+
+Tämä vastaisi seuraavaa komentoa:
+
+```sh
+nano tiedosto.txt
+```
+
+Tässä esimerkissä ei `|`-putkioperaatiosta juuri ole hyötyä, koska komento on itsessään niin lyhyt ja yksinkertainen.
+
+`|`-putkioperaattorin käyttö on kuitenkin hyvinkin hyödyllistä, jos tiedostoon kirjoitettu komento olisi kovinkin pitkä kirjoittaa komentoriville.
+Monesti on selvempää kirjoittaa pitkät komennot erilliseen tiedostoon, ja putkittaa ne lyhyesti toiselle komennolle.
+
+Myöhemmin debianin wordpress-ohjeissa näemme paremman esimerkin, 
+jossa pitkän sql-tiedoston sisältö ohjataan mysql-komennolle.
 
 ## Seuraavaksi: `apt`- js `sudo`-ohjeet
+
+Kyseisten komentojen hallinta on esitietona seuraavissa ohjeissa.
 
 Seuraavaksi [apt- ja sudo-ohjeet](./03-debian-apt.md)
