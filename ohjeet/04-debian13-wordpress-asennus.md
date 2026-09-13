@@ -23,6 +23,7 @@ Kun konfiguroit wordpressin paikallista kehitystä varten, sinun tulee tehdä se
 3. Käytä apachen `/etc/apache2/sites-available/wp.conf`-konfiguraatiotiedostoa täyttäessä paikallisen asennuksen yhteydessä `localhost`-arvoa ja `.local`-osoitetta.
 4. Nimeä debianin wordpressin konfiguraatiotiedosto nimellä: `/etc/wordpress/config-localhost.php`, jotta sitä käytetään kun sivu avataan `http://localhost` -url-osoitteella.
 5. Aseta debianin wordpressin konfiguraatiotiedostoon sama salasana, jota myöhemmin käytät tietokantoja luodessa `~/wp.sql`-tiedostossa.
+6. Lisää `~/wp.sql`-tiedostoon LOCK-rooli käyttäjälle.
 
 Jos satut tekemään esimerkiksi kirjoitusvirheitä ohjeita seuratessasi,
 et välttämättä onnistukaan saamaan wordpressiä käyntiin.
@@ -142,6 +143,16 @@ Lopuksi wordpressin `/etc/wordpress/config-localhost.php`-konfiguraatiotiedostos
 Vaihda molempiin tiedostoihin pienellä kirjoitetun `password`-sanan tilalle haluamasi salasana. 
 
 Huomaa, että salasana tulee asettaa `~/wp.sql`-tiedostossa kahteen eri paikkaan.
+
+#### 6. Lisää `~/wp.sql`-tiedostoon LOCK-rooli käyttäjälle.
+
+Lisää 3 rivin loppuun vielä LOCK oikeus:
+
+```sql
+GRANT SELECT,INSERT,UPDATE,DELETE,CREATE,DROP,ALTER,LOCK
+```
+
+Tämä tarvitaan, jotta käyttäjä voi suorittaa varmuuskopioinnin, ja palauttaa varmuuskopion.
 
 ### Debuggauksesta
 
