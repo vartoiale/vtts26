@@ -14,7 +14,7 @@ voit avata wordpressin selaimessa (paikallisesti kehitettäessä osoitteessa `ht
 
 Alta löydät vielä muutokset, jotka sinun tulee tehdä paikallisesti wordpressiä asentaessasi.
 
-## Paikalliseen kehitykseen tarvittavat muutokset
+## Paikalliseen kehitykseen tarvittavat muutokset ja debuggaus virhetilanteissa
 
 Kun konfiguroit wordpressin paikallista kehitystä varten, sinun tulee tehdä seuraavat muutokset:
 
@@ -22,9 +22,17 @@ Kun konfiguroit wordpressin paikallista kehitystä varten, sinun tulee tehdä se
 2. Vastaa ohjeiden mukaisesti `mysql_secure_installation`-komennon kyselyihin.
 3. Käytä apachen `/etc/apache2/sites-available/wp.conf`-konfiguraatiotiedostoa täyttäessä paikallisen asennuksen yhteydessä `localhost`-arvoa ja `.local`-osoitetta.
 4. Nimeä debianin wordpressin konfiguraatiotiedosto nimellä: `/etc/wordpress/config-localhost.php`, jotta sitä käytetään kun sivu avataan `http://localhost` -url-osoitteella.
-5. Aseta debianin wordpressin konfiguraatiotiedostoon sama salasana, jota myöhemmin käytät tietokantoja luodessa `~/wp.sql`-tiedostossa. 
+5. Aseta debianin wordpressin konfiguraatiotiedostoon sama salasana, jota myöhemmin käytät tietokantoja luodessa `~/wp.sql`-tiedostossa.
 
-Näistä lisää vielä alla.
+Jos satut tekemään esimerkiksi kirjoitusvirheitä ohjeita seuratessasi,
+et välttämättä onnistukaan saamaan wordpressiä käyntiin.
+Tällöin joudut tekemään debuggausta, eli etsimään virheitä konfiguraatiotiedostoista.
+
+Debuggauksesta kerrotaan lisää tämän tiedoston lopussa.
+
+Näistä siis lisää vielä alla.
+Ensin muutoksista ohjeisiin,
+ja sen jälkeen debuggauksesta, eli vian etsinnästä.
 
 ### Muutokset ohjeisiin
 
@@ -134,3 +142,70 @@ Lopuksi wordpressin `/etc/wordpress/config-localhost.php`-konfiguraatiotiedostos
 Vaihda molempiin tiedostoihin pienellä kirjoitetun `password`-sanan tilalle haluamasi salasana. 
 
 Huomaa, että salasana tulee asettaa `~/wp.sql`-tiedostossa kahteen eri paikkaan.
+
+### Debuggauksesta
+
+Jos seuraat ohjeita, mutta tulet tehneeksi kirjoitusvirheitä, sinun pitää jotenkin pystyä keksimään missä kohdin olet virheet tehnyt.
+
+Alla on muutama vinkki:
+
+1. Lue kaikki kirjoittamasi komennot läpi, ja tarkista, että olet kirjoittanut kaiken ohjeiden mukaan merkilleen.
+2. Lue kaikki kirjoittamasi tiedostot läpi, ja tarkista, että olet kirjoittanut kaiken ohjeiden mukaan merkilleen.
+
+Huomaa myös, että:
+
+* isot ja pienet kirjaimet tarkoittavat linuxissa eri asioita.
+* välilyöntien määrällä ei ole väliä, kunhan niitä on oikeissa paikoissa, ja vain oikeissa paikoissa.
+
+Jos kohdassa pitää olla välilyönti, ei haittaa, jos välilyöntejä on useampi.
+Muihin paikkoihin ei kuitenkaan voi laittaa välilyöntejä.
+
+Poikkeuksena ensimmäiseen on konfiguraatiotiedostot, joiden sisennyksessä välilyöntien määrällä on väliä. Tarkista siis nekin.
+
+#### Kun komento toimii, se ei kerro mitään
+
+Linuxin komentorivi on siitä erikoinen, että onnistuessaan komennot eivät yleensä tulosta mitään ruudulle.
+
+Päinvastoin, virheen sattuessa komentoriville yleensä tulostuu jonkinlainen virheilmoitus, parhaassa tapauksessa kenties jopa kuvaus virheestä. 
+
+Eli jos komento ei näytä tehneen mitään, koska se ei tulostanut mitään, se onkin oikeasti suoritettu onnistuneesti.
+
+#### Kun apache antaa virhettä, katso logia
+
+Kun käynnistät apachen uudelleen ohjeiden mukaisesti:
+
+```sh
+sudo service apache2 reload
+```
+
+mutta se antaakin virheen,
+tarkoittaa se, ettet ole täysin onnistunut seuraamaan ohjeita pilkulleen, vaan olet tehnyt jossain virheen.
+
+Se missä virhe on tapahtunut ei välttämättä ole ihan heti selvää.
+
+Onneksi apache kertoo, monien muiden linux-ohjelmien tavoin, logissaan, missä virhe on tapahtunut.
+
+Apachen logia pääset lukemaan komennolla:
+
+```sh
+sudo service apache2 status
+```
+
+_Tätä varten kannattaa laajentaa komentoriviohjelman ikkuna mahdollisimman isoksi. 
+Mahdollisesti voit joutua ajamaan komennon uudelleen, tehtyäsi ikkunasta isomman, jotta komento osaa hyödyntää laajennetun ikkunan koko alan._
+
+Virhe todennäköisesti näkyy punaisella tekstillä.
+
+Virheen yhteydessä mainitaan todennäköisesti rivi, jolla virhe on tapahtunut,
+sekä tiedosto, jossa virhe on tapahtunut.
+
+Etsi siis virheen sijainti status-logista, ja korjaa se mainitussa sijainnissa (riviltä tiedostossa).
+
+Kun olet korjannut virheen, yritä ajaa `sudo service apache2 reload`-komento uudelleen.
+
+Jos saat vieläkin virhettä, tarkista uudelleen `sudo service apache2 status`-logista, onko virhe samalla rivillä vai uudella rivillä:
+
+* Jos virhe on samalla rivillä, samassa tiedostossa, korjasit mahdollisesti virheen väärin, tai samalla rivillä oli toinenkin virhe.
+* Jos virhe on eri rivillä, tai eri tiedostossa, virheitä oli vain useampi, ja sinun pitää korjata seuraava.
+
+Jatka näin, kunnes olet saanut kaikki virheet korjattua.
