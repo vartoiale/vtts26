@@ -203,7 +203,7 @@ Tarkemmin sanottuna, määrität seuraavassa `~/wp.sql`-tiedostossa tämän tiet
 Voit kuitenkin keksiä sen jo nyt. 
 Tärkeintä on, että salasana on sama sekä `/etc/wordpress/config-localhost.php` ja `~/wp.sql`-tiedostoissa.
 
-#### ``-ympäristömuuttujan asetus
+#### `FS_METHOD`-ympäristömuuttujan asetus
 
 Huomaa myös, että yllä olevasta koodista löytyvä `FS_METHOD`-ympäristömuuttujan asetus ei ole mukana debianin ohjeissa.
 
@@ -215,6 +215,7 @@ define('FS_METHOD', 'direct');
 
 Tämä ympäristömuuttuja, ja sen arvo sallii selaimesta käsin tapahtuvan tiedostojen muokkauksen.
 Sen asettaminen on siis tietoturvanäkökulmasta erittäin huono idea.
+
 **Sitä ei tule missään nimessä käyttää tuotannossa olevalla palvelimella.**
 
 Käytämme sitä kuitenkin tässä yhteydessä, 
@@ -223,6 +224,8 @@ koska tiedämme, että ajamme palvelintamme vain omassa lähiverkossamme kehityk
 Se ei silti ole välttämättä kovin hyvä idea.
 
 Tarvitsemme sitä kuitenkin, jotta voimme asentaa wordpress:in plugineja selaimen kautta.
+
+Tästä voi lukea lisää stackoverflow-kysymyksestä: [wordpress on localhost lamp doesn't let me install plugins](https://wordpress.stackexchange.com/questions/19649/wordpress-on-localhost-lamp-doesnt-let-me-install-plugins).
 
 ### Tietokanta-asetusten määrittäminen `~/wp.sql`-tiedostossa
 
