@@ -225,7 +225,10 @@ Se ei silti ole välttämättä kovin hyvä idea.
 
 Tarvitsemme sitä kuitenkin, jotta voimme asentaa wordpress:in plugineja selaimen kautta.
 
-Tästä voi lukea lisää stackoverflow-kysymyksestä: [wordpress on localhost lamp doesn't let me install plugins](https://wordpress.stackexchange.com/questions/19649/wordpress-on-localhost-lamp-doesnt-let-me-install-plugins).
+Lähteitä:
+
+* Tästä voi lukea lisää stackoverflow-kysymyksestä: [wordpress on localhost lamp doesn't let me install plugins](https://wordpress.stackexchange.com/questions/19649/wordpress-on-localhost-lamp-doesnt-let-me-install-plugins).
+* Wordpress:in [`wp-config.php`-tiedoston dokumentaatio](https://developer.wordpress.org/advanced-administration/wordpress/wp-config/).
 
 ### Tietokanta-asetusten määrittäminen `~/wp.sql`-tiedostossa
 
