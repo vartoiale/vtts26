@@ -149,7 +149,7 @@ Huomaa, että salasana tulee asettaa `~/wp.sql`-tiedostossa kahteen eri paikkaan
 Lisää 3 rivin loppuun vielä LOCK oikeus:
 
 ```sql
-GRANT SELECT,INSERT,UPDATE,DELETE,CREATE,DROP,ALTER,LOCK
+GRANT SELECT,INSERT,UPDATE,DELETE,CREATE,DROP,ALTER,LOCK TABLES
 ```
 
 Tämä tarvitaan, jotta käyttäjä voi suorittaa varmuuskopioinnin, ja palauttaa varmuuskopion.
@@ -220,3 +220,25 @@ Jos saat vieläkin virhettä, tarkista uudelleen `sudo service apache2 status`-l
 * Jos virhe on eri rivillä, tai eri tiedostossa, virheitä oli vain useampi, ja sinun pitää korjata seuraava.
 
 Jatka näin, kunnes olet saanut kaikki virheet korjattua.
+
+#### SQL-tiedoston ajo epäonnistuu (käyttäjän luonti epäonnistuu)
+
+Kun ohjeen mukainen `~/wp.sql` ajo epäonnistuu, tämä saattaa johtua siitä, että olet jo ajanut osittain tietokannan luovan koodin, ja se on osittain epäonnistunut.
+
+Jos haluat ajaa tietokannan luonnin uudestaan, helpointa lienee, jos poistat tietokannan ensin kokonaisuudessaan. 
+Huomaa kuitenkin, että tätä ei kannata tehdä, jos olet jo luonut wordpressiin sisältöä, koska tietokannan poisto poistaa myös tämän sisällön.
+
+Tietokannan resetointi onnistuu seuraavien neljän komennon avulla:
+
+```sh
+sudo systemctl stop mysql
+sudo rm -rf /var/lib/mysql/*
+sudo -u mysql mysql_install_db
+sudo systemctl start mysql
+```
+
+Tämän jälkeen voit taas ajaa uudelleen tietokannan generoivan lausekkeen:
+
+```sh
+cat ~/wp.sql | sudo mysql --defaults-extra-file=/etc/mysql/debian.cnf
+```
