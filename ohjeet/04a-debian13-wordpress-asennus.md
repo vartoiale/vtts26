@@ -1,10 +1,26 @@
 # Ohje 4A: Wordpressin asennus debian 13 (trixie) -käyttöjärjestelmään
 
-## Helppo asennus
+## Helpompi ohje
+
+Helpompi ohje löytyy osoitteesta:
+
+* [Ohje 4B: Wordpressin asennus debian 13 (trixie) -käyttöjärjestelmään](./04b-debian13-wordpress-asennus.md)
+
+Yllä oleva ohje on muokattu versio debianin omasta ohjeesta,
+johon on lisätty mukaan ne asiat,
+jotka pitää huomioida,
+kun wordpress-asennetaan paikallista kehitystä varten kehityspalvelimelle.
+
+Tästä tiedostosta löytyy paremmin tietoa muutoksista, 
+jotka on lisätty ohjeeseen 4B.
+
+Alla kuitenkin vielä nämä alkuperäiset ohjeet, ja tiedot tarpeellisista muokkauksista.
+
+## Alkuperäinen ohje
 
 Debian tarjoaa oman ohjeen wordpressin asentamiseen:
 
-* [wordpress](https://wiki.debian.org/WordPress?pow_referer=https%3A%2F%2Fwww.google.com%2F)-ohje
+* [wordpress](https://wiki.debian.org/WordPress)-ohje
 
 Huomaa, että `Upgrading the installed wordpress version`-otsikon alla alkaa ohjeissa seuraava osio,
 eikä sitä pidemmälle tarvitse mennä.
