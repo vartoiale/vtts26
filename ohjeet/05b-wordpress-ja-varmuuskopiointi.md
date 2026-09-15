@@ -51,7 +51,7 @@ ja siihen löytyy hyvät ohjeet ylläolevasta wordpress:in omasta ohjeesta.
 Asennusta ei kuitenkaan ole wordpress:in ohjeessa hyvin dokumentoitu,
 joten ohjeet siihen löytyvät alta.
 
-## Phpmyadmin:in asennus
+#### Phpmyadmin:in asennus
 
 Saat asennettua phpMyAdmin-työkalun apt:illa:
 
@@ -61,10 +61,29 @@ sudo apt install phpmyadmin
 
 Komento käynnistää asennuksen johon kuuluu kaksi sinistä ikkunaa:
 
-1. Ensimmäisessä sinisessä ikkunassa valitse `space`-näppäimellä `apache2`, 
+1. Ensimmäisessä sinisessä ikkunassa valitse `space`-näppäimellä `apache2` (siten, että `apache2` viereen tulee `*`-merkki), 
    ja hyväksy valinta `enter`-näppäimellä.
 2. Toisessa sinisessä ikkunassa valitse `no`, painamalla `enter`-näppäintä,
    koska olemme jo konfiguroineet tietokannan.
+
+##### Phpmyadmin:in uudelleenkonfigurointi
+
+Jos phpmyadmin ei käynnisty, esimerkiksi valittuasi väärät asetukset asennuksen yhteydessä,
+voit ajaa uudelleenkonfiguroinnin:
+
+```sh
+sudo dpkg-reconfigure phpmyadmin
+```
+
+Uudelleenkonfiguroinnin yhteydessä:
+
+1. Ensimmäisessä ikkunassa, paina `sarkain`-näppäintä (engl. "tab" tai "tabulator", löytyy `CapsLock`-näppäimen yläpuolelta), jotta pääset "ok"-napille, ja tämän jälkeen paina `enter`-näppäintä.
+2. Toisessa ikkunassa, jossa kysytään "reinstall database for phpmyadmin?", valitse "no", ja paina `enter`-näppäintä.
+3. Kolmannessa ikkunassa, jossa kysytään "Web server to configure automatically:", valitse `space`-näppäimellä `apache2` (siten, että `apache2` viereen tulee `*`-merkki), käytä `sarkain`-näppäintä siirtyäksesi "ok"/"cancel"-riville, ja valitse "ok" painamalla sen kohdalla `enter`-näppäintä.
+
+Nyt sinulla pitäisi olla asennus kunnossa.
+
+#### Phpmyadmin:in käyttö
 
 Asennuksen jälkeen avaa phpmyadmin selaimessa osoitteesta: `localhost/phpmyadmin`.
 
