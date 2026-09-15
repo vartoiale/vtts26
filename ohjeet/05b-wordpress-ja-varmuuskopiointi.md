@@ -82,13 +82,44 @@ Et siis voi käyttää kirjautumiseen wordpress:in käyttäjätunnusta tai salas
 
 Lähdetään seuraavaksi tekemään varmuuskopiota ja sen jälkeen palauttamaan se.
 
-### Tietokannan varmuuskopiointi
+### Varmuuskopiointi-kansion luominen
+
+Kannattaa aloittaa varmuuskopiointi luomalla `~/varmuuskopio`-niminen kansio.
+
+Tällöin varmuuskopiot löytyvät yhdestä paikasta, josta ne on helppo kopioida usb-muistille tai läppärille.
+
+Mennään aluksi kotihakemistoon:
+
+```sh
+cd ~
+```
+
+Luodaan `~/varmuuskopio`-kansio:
+
+```sh
+mkdir varmuuskopio
+```
+
+Mennään `~/varmuuskopio`-kansioon.
+
+```sh
+cd varmuuskopio
+```
+
+Nyt voimme ajaa varmuuskopiot luovat komennot tässä `~/varmuuskopio`-kansiossa, 
+jolloin komennoilla luodut varmuuskopiot löytyvät tästä `~/varmuuskopio`-kansiosta.
+
+### varmuuskopioiden luonti
+
+#### Tietokannan varmuuskopiointi
 
 Varmuuskopioi komennolla:
 
 ```sh
 mysqldump --add-drop-table -h localhost -u wordpress -p wordpress > wordpress.varmuuskopio.sql
 ```
+
+Tämä luo, kansioon jossa olet komentoa ajaessasi, `wordpress.varmuuskopio.sql`-nimisen varmuuskopion.
 
 Tee varmuuskopiosta kooltaan pienempi zip-tiedosto:
 
@@ -97,12 +128,12 @@ bzip2 wordpress.varmuuskopio.sql
 ```
 
 Tämä luo uuden tiedoston nimellä `wordpress.varmuuskopio.sql.bz2` 
-ja poistaa pakkaamattoman `wordpress.varmuuskopio.sql`-tiedoston.
+ja poistaa aiemman pakkaamattoman `wordpress.varmuuskopio.sql`-tiedoston.
 
 Voit nyt tallettaa pakatun `wordpress.varmuuskopio.sql.bz2`-tiedoston esim. usb-tikulle,
 tai siirtää talteen omalle koneellesi.
 
-### Tiedostojen varmuuskopiointi
+#### Tiedostojen varmuuskopiointi
 
 Mitä kansioita tarvitsee varmuuskopioida:
 
@@ -118,7 +149,9 @@ sudo tar -zcvf wordpress_tiedostot.varmuuskopio.tar.gz /var/lib/wordpress/wp-con
 
 Vastaavasti, voit tämän jälkeen tallentaa `wordpress_tiedostot.varmuuskopio.tar.gz`-varmuuskopion usb-tikulle tai omalle koneellesi talteen.
 
-### Tiedostojen palautus varmuuskopiotiedostosta
+### varmuuskopiosta palautus
+
+#### Tiedostojen palautus varmuuskopiotiedostosta
 
 Palauta varmuuskopioitu kansiorakenne sisältöineen takaisin debianin `/`-juureen komennolla:
 
@@ -128,7 +161,7 @@ sudo tar -zxvf wordpress_tiedostot.varmuuskopio.tar.gz -C /
 
 Tässä oletuksena oli, että `wordpress_tiedostot.varmuuskopio.tar.gz` löytyi hakemistosta, jossa suoritit komennon.
 
-#### Oikeuksien palautus
+##### Oikeuksien palautus
 
 Jotta kaikki toimii, palautetuille kansioille pitää vielä antaa takaisin oikeat oikeudet:
 
@@ -143,7 +176,7 @@ sudo chown -R root:www-data /etc/wordpress/
 sudo chmod 640 /etc/wordpress/config-localhost.php
 ```
 
-#### apachen uudelleenkäynnistys palautuksen jälkeen
+##### apachen uudelleenkäynnistys palautuksen jälkeen
 
 Lisäksi apachen konfiguraatio pitää vielä käynnistää uudelleen:
 
@@ -152,7 +185,7 @@ sudo a2ensite wp
 sudo systemctl restart apache2
 ```
 
-### Tietokannan palautus varmuuskopiotiedostosta
+#### Tietokannan palautus varmuuskopiotiedostosta
 
 Siirry ensin hakemistoon, jossa tietokannastasi tekemäsi varmuuskopio sijaitsee.
 
