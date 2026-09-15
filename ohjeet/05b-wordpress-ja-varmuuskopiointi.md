@@ -78,6 +78,124 @@ Huomaa, että phpmyadmin ei siis yritä kirjautua wordpressiin,
 vaan se haluaa kirjautua mariadb-tietokantaan.
 Et siis voi käyttää kirjautumiseen wordpress:in käyttäjätunnusta tai salasanaa.
 
+## Sisällön luominen varmuuskopiointia varten
+
+Tässä harjoituksena oletus on, että olet vasta luonut uuden wordpress-asennuksen,
+eikä wordpress-sivusto vielä sisällä mitään oikeaa, tärkeää sisältöä.
+
+Jotta näkisimme, että varmuuskopion tekeminen ja palautus onnistuu,
+luomme aluksi sisältöä wordpress-sivustollemme.
+
+1. Luomme muutaman uuden sivun,
+2. Lataamme sivustolle kuvia, ja lisäämme ne sivuille,
+3. Lataamme asennukseen pluginin, ja käytämme niitä ainakin yhdellä sivuista.
+
+### 1. Luomme muutaman uuden sivun
+
+Luo uusia sivuja `localhost/wp-admin`-näkymän kautta.
+
+Voit luoda esim. seuraavat sivut:
+
+1. kirahvi (engl. giraffe)
+2. koira (engl. dog)
+3. marsu (engl. guinea pig)
+
+#### Miksi luomme sivuja varmuuskopio-harjoitusta varten?
+
+Normaalit sivut tallentuvat wordpress:issä tietokantaan.
+
+Kun palautuksen jälkeen näemme, että sivut ovat palautuneet takaisin wordpress-sivustolle,
+tiedämme että tietokannan palautus varmuuskopiosta on toiminut tältä osin.
+
+### 2. Lataamme sivustolle kuvia, ja lisäämme ne sivuille
+
+Lataa jokaiseen uuteen sivuusi yksi tai useampi otsikkoon liittyvä kuva.
+
+#### unsplash.com tarjoaa ilmaisia valokuvia
+
+Voit ladata ilmaiseksi, vapaahkolle lisenssillä kuvia esim.:
+
+* [unsplash.com](https://unsplash.com)-sivustolta
+
+Unsplash tarjoaa tätä kirjoittaessa ilmaisia ja maksullisia kuvia:
+
+* maksullisissa kuvissa on `+`-merkki vasemmassa yläkulmassa
+* ilmaisissa kuvissa ei ole `+`-merkkiä
+
+Kun klikkaat kuvaa, aukeavassa popup-ikkunassa on vihreä nappi oikeassa yläkulmassa,
+jossa lukee "download free".
+
+Muista tallentaa kuvat ensin koneellesi, ja sen jälkeen lataa (engl. upload) ne wordpress-palvelimelle, 
+jotta ne varmasti tallentuvat tiedostoina palvelimelle.
+
+#### Miksi lisäämme kuvia varmuuskopio-harjoitusta varten?
+
+Kuvat tallentuvat tiedostoina wordpress-asennuksemme tiedostokansioon.
+
+Samalla niiden käyttöpaikka tallennetaan kuitenkin wordpressin tietokantaan.
+
+Jos palautuksen jälkeen kuvat näkyvät luomillamme wordpress-sivuilla,
+tiedämme että palautus on tältä osin onnistunut tiedostojen ja tietokantojen palautuksen osalta.
+
+### 3. Lataamme asennukseen pluginin, ja käytämme niitä ainakin yhdellä sivuista
+
+Asenna wordpress-sivustollesi jokin plugin.
+
+_Localhost:issa plugineita asennettaessa `/etc/wordpress/config-localhost.php`-tiedostossa pitää olla rivi: `define('FS_METHOD', 'direct');`, 
+jotta pystyt asentamaan plugineita selaimen kautta.
+Tätä riviä ei kuitenkaan tule käyttää silloin kun asennus on internetistä löytyvällä palvelimella,
+koska se on suuri tietoturvariski._
+
+Hyvä plugin on esim. automattic:in (wordpressin tekijän) luoma bauhaus-plugin:
+
+* [bauhaus centennary block](https://arg.wordpress.org/plugins/bauhaus-centenary/)
+
+#### Bauhaus Centennary Block -plugin
+
+Tarvitsemme siis jonkin hyvän, mutta luotettavan pluginin, ja automattic:in luoma Bauhaus Centennary Block -plugin on enemmän tai vähemmän tällainen.
+
+#### Bauhaus Centennary Blockin asennus
+
+Asennus onnistuu seuraavasti:
+
+1. mene `localhost/wp-admin`-näkymään, jos et vielä siinä ole,
+2. klikkaa vasemmasta sivupalkista "plugins",
+3. klikkaa sen alta "add plugin",
+4. etsi hakukentästä "bauhaus",
+5. valitse löytyneiden plugineiden joukosta "bauhaus centennary block", jossa tekijänä on "automattic",
+6. asenna plugin "install plugin"-napista.
+
+Jos asennus jää pyörimään, eikä valmistu (sen pitäisi asentua nopeasti), tee vielä seuraavat vaiheet:
+
+1. klikkaa vasemmasta sivupalkista "plugins"-osion alta "installed plugins",
+2. jos selain kysyy popupilla, haluatko poistua kesken kaiken, vastaa "poistu" yms,
+3. klikkaa installed plugins-näkymässä "Bauhaus Centennary Block"-pluginin alta "aktivoi"-nappia (engl. activate).
+
+Nyt Bauhaus Centennary Block -pluginin pitäisi olla asentunut, 
+ja voit seuraavaksi käyttää sitä jollain luomistasi wordpress-sivuista.
+
+#### Bauhaus Centennary Blockin käyttö
+
+Kun olet asentanut pluginin,
+käytä sen tarjoamaa Bauhaus Centennary -blockia jollain sivulla.
+
+1. avaa esim. kirahvi-sivu muokkausta varten,
+2. avaa block:ien lisäyssivupalkki painamalla vasemman yläkulman `+`-nappia,
+3. kirjoita hakukenttään "bauhaus", ja valitse "bauhaus centennary"-block listalta, (on mahdollista, että wordpress-ilmoittaa, että bauhaus centennary pitää ensin asentaa, jos näin on, tee se ensin),
+4. etsi sivun lopusta äsken lisäämäsi bauhaush centennary -block, ja klikkaa siitä löytyvää pientä "1919"-nappia.
+
+Nyt sinulla pitäisi olla sivullasi monivärinen bauhaus-teksti/-numero.
+
+#### Miksi asennamme ja käytämme plugineita varmuuskopio-harjoitusta varten?
+
+Pluginit asennetaan wordpress-asennuksen sisältökansioihin tiedostoina.
+
+Samoin kuin kuvien osalta, niiden käyttö wordpress-sivuilla tallentuu kuitenkin tietokantaan.
+
+Eli kun asennamme ensin pluginin, ja sen jälkeen käytämme sitä jollain wordpress-sivulla,
+pystymme myöhemmin helposti tarkistamaan, 
+että varmuuskopiointimme ja siitä palautus on onnistunut.
+
 ## Komentoriviltä varmuuskopion tekeminen ja palautus
 
 Lähdetään seuraavaksi tekemään varmuuskopiota ja sen jälkeen palauttamaan se.
@@ -148,6 +266,28 @@ sudo tar -zcvf wordpress_tiedostot.varmuuskopio.tar.gz /var/lib/wordpress/wp-con
 ```
 
 Vastaavasti, voit tämän jälkeen tallentaa `wordpress_tiedostot.varmuuskopio.tar.gz`-varmuuskopion usb-tikulle tai omalle koneellesi talteen.
+
+### välisoitto: varmuuskopioinnin ja siitä palautuksen aikana tapahtuvat asiat
+
+Olet nyt saanut wordpress:in varmuuskopioitua, eli olet varmuuskopioinut:
+
+* wordpressin tietokannan
+* wordpressin tiedostot
+
+Tyypillisesti varmuuskopioita tarvitaan muutamassa eri tapauksessa, tällaisia voivat olla:
+
+* tehdään varmuuskopio siltä varalta, että järjestelmä hajoaa, ja varmuuskopio, on nimensä mukaisesti varmuuden vuoksi otettu kopio järjestelmästä,
+* tehdään varmuuskopio, koska halutaan siirtää wordpress-sivusto toiselle koneelle.
+
+Voit esimerkiksi kokeilla toteuttaa simuloidun järjestelmän vaihdon, muokkaamalla jotenkin wordpress-sivustoasi, tai sen asennusta.
+
+Voit esimerkiksi wordpress:in ylläpitäjäkäyttöliittymän kautta poistaa tekemiäsi sivuja.
+Tätä ei kuitenkaan kannata tehdä, jos sivustosi sisältää oikeaa sisältöä. On nimittäin mahdollista, että varmuuskopiosi onkin jollain tavalla epäonnistunut tai korruptoitunut,
+eikä siitä lopulta pystykään palauttamaan sivustoa takaisin järjestelmään.
+
+Tässä harjoituksessa oletus on, että wordpress-asennuksesi on uusi, eikä vielä sisällä mitään tallennuksen arvoista. Jos näin on, voit halutessasi poistaa sieltä kaikki sivut ja mediat. 
+
+Tällöin, varmuuskopiosta sisältöä palauttaessasi tiedät, että varmuuskopiosta palautus on onnistunut, kun sisältö taas näkyy wordpress-sivustollasi.
 
 ### varmuuskopiosta palautus
 
