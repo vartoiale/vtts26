@@ -81,7 +81,7 @@ Et siis voi käyttää kirjautumiseen wordpress:in käyttäjätunnusta tai salas
 Tämän jälkeen voit kokeilla tehdä phpmyadmin:in avulla:
 
 1. varmuuskopioinnin
-   - https://developer.wordpress.org/advanced-administration/security/backup/#simple-backup-with-phpmyadmin
+   - https://developer.wordpress.org/advanced-administration/security/backup/#simple-backup-with-phpmyadmin, tai
    - https://developer.wordpress.org/advanced-administration/security/backup/database/
 2. palautuksen varmuuskopiosta
    - https://developer.wordpress.org/advanced-administration/security/backup/database/#using-phpmyadmin-2
