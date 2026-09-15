@@ -69,7 +69,7 @@ Komento käynnistää asennuksen johon kuuluu kaksi sinistä ikkunaa:
 Asennuksen jälkeen avaa phpmyadmin selaimessa osoitteesta: `localhost/phpmyadmin`.
 
 Kun phpmyadmin kysyy käyttäjää ja salasanaa, anna tietokannan käyttäjänimi ja salasana,
-jotka määritit `~/wp.sql`-tiedostossa:
+jotka määritit `~/wp.sql`-tiedostossa (käytit niitä myös `/etc/wordpress/config-localhost.php`-tiedostossa):
 
 * käyttäjänimi on `wordpress`, paitsi jos vaihdoit sen,
 * salasana on asettamasi.
@@ -77,6 +77,17 @@ jotka määritit `~/wp.sql`-tiedostossa:
 Huomaa, että phpmyadmin ei siis yritä kirjautua wordpressiin, 
 vaan se haluaa kirjautua mariadb-tietokantaan.
 Et siis voi käyttää kirjautumiseen wordpress:in käyttäjätunnusta tai salasanaa.
+
+Tämän jälkeen voit kokeilla tehdä phpmyadmin:in avulla:
+
+1. varmuuskopioinnin
+   - https://developer.wordpress.org/advanced-administration/security/backup/#simple-backup-with-phpmyadmin
+   - https://developer.wordpress.org/advanced-administration/security/backup/database/
+2. palautuksen varmuuskopiosta
+   - https://developer.wordpress.org/advanced-administration/security/backup/database/#using-phpmyadmin-2
+
+Kun olet luonut varmuuskopion, mutta ennen palautusta, muokkaa sivustoa, niin,
+että huomaat eron aiemman tilan ja palautetun tilan välillä.
 
 ## Sisällön luominen varmuuskopiointia varten
 
