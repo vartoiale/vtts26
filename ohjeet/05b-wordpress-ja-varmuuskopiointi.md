@@ -261,6 +261,8 @@ jolloin komennoilla luodut varmuuskopiot löytyvät tästä `~/varmuuskopio`-kan
 
 #### Tietokannan varmuuskopiointi
 
+##### Tietokannan varmuuskopion luonti
+
 Varmuuskopioi komennolla:
 
 ```sh
@@ -268,6 +270,17 @@ mysqldump --add-drop-table -h localhost -u wordpress -p wordpress > wordpress.va
 ```
 
 Tämä luo, kansioon jossa olet komentoa ajaessasi, `wordpress.varmuuskopio.sql`-nimisen varmuuskopion.
+
+##### Debuggausta: jos `mysqldumb` epäonnistuu virheviestiin, jossa mainitaan `LOCK TABLES`
+
+Jos edellinen `mysqldumb` epäonnistuu, ja virheviestissä mainitaan puuttuva `LOCK TABLES`,
+sinun pitää käyttää seuraavaa komentoa (eli siis lisätä `--single-transaction` aiempaan komentoon):
+
+```sh
+mysqldump --single-transaction --add-drop-table -h localhost -u wordpress -p wordpress > wordpress.varmuuskopio.sql
+```
+
+##### Tietokannan varmuuskopion pakkaus pienemmäksi tiedostoksi
 
 Tee varmuuskopiosta kooltaan pienempi zip-tiedosto:
 
@@ -381,6 +394,57 @@ Tässä:
 * `-p` saa arvokseen tietokannan nimen `wordpress`.
 
 Lopulta arvot siirretään varmuuskopiotiedostosta vasemmalle osoittavalla nuolella (`<`) `mysql`-komennolle.
+
+##### Debuggaus: `LOCK TABLES`-virhe
+
+Jos saat taas tässäkin `LOCK TABLES`-virheilmoituksen, joudut tekemään seuraavat muokkaukset:
+
+1. lisää `LOCK TABLES`-oikeus tietokannan wordpress-käyttäjälle `~/wp.sql`-tiedostossa,
+2. resetoi mariadb-tietokanta
+3. ota `~/wp.sql`-tiedosto uudelleen käyttöön, uusine muutoksineen
+
+Huomaa, että kohta 2), tietokannan resetointi, on huono idea normaalisti. Tässä se voidaan tehdä turvallisesti,
+koska tietokantaan ei vielä pitäisi olla asennettu mitään tärkeää.
+
+Jos olet tekemässä tätä oikealla wordpress-asennuksella, huomaa, että tietokannan resetoimalla tyhjennät kaiken wordpress-tietokannastasi.
+
+###### 1. lisää `LOCK TABLES`-oikeus tietokannan wordpress-käyttäjälle `~/wp.sql`-tiedostossa,
+
+Muokkaa tiedostoa `~/wp.sql`:
+
+```sh
+nano ~/wp.sql
+```
+
+Muokkaa `GRANT`-sanalla alkava rivi muotoon (rivin lopusta tulee löytyä `LOCK TABLES`, jos seurasit aiempaa ohjetta, se saattaa puuttua):
+
+```sql
+GRANT SELECT,INSERT,UPDATE,DELETE,CREATE,DROP,ALTER,LOCK TABLES
+```
+
+Tallenna muutokset (`ctrl + O`, ja hyväksy tiedoston nimi `enter`-näppäimellä). Poistu (`ctrl + X`)
+
+###### 2. resetoi mariadb-tietokanta
+
+Resetoi mariadb-tietokanta käyttäen seuraavia neljää komentoa:
+
+```sh
+sudo systemctl stop mysql
+sudo rm -rf /var/lib/mysql/*
+sudo -u mysql mysql_install_db
+sudo systemctl start mysql
+```
+
+###### 3. ota `~/wp.sql`-tiedosto uudelleen käyttöön, uusine muutoksineen
+
+Lopuksi käytämme aiemmasta ohjeesta tuttua komentoa, jolla mysql:ää ohjeistetaan luomaan `~/wp.sql`-tiedostossa määritetyt asiat: 
+
+```sh
+cat ~/wp.sql | sudo mysql --defaults-extra-file=/etc/mysql/debian.cnf
+```
+
+Nyt voit palata pari askelta taaksepäin tässä ohjeessa,
+ja palauttaa tietokannan tilan varmuuskopiosta `mysql`-komennolla.
 
 ## Loppu
 
