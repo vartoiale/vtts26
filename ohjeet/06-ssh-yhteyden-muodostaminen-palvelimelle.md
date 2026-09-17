@@ -145,8 +145,8 @@ Siirrä varmuuskopio talteen palvelimelta, läppärille, haluamaasi kansioon.
 Koska tulet tekemään useita varmuuskopioiden tallennuksia, 
 kannattaa lisätä varmuuskopioinnin päivämäärä joko:
 
-a. tiedoston nimeen, tai 
-b. luoda erillinen päivämäärän sisältävä kansio, johon tiedostot tallennat.
+1. tiedoston nimeen, tai
+2. luoda erillinen päivämäärän sisältävä kansio, johon tiedostot tallennat.
 
 Näin pystyt helposti löytämään tiettynä ajankohtana tehdyn varmuuskopion nimen perusteella.
 
