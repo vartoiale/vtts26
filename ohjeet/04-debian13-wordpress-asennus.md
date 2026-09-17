@@ -315,4 +315,4 @@ Tämän jälkeen, kirjauduttuasi asennus on valmis, ja pääset käyttämään u
 
 ## Seuraavaksi
 
-Seuraavaksi: [5. wordpress ja varmuuskopiointi](./05a-wordpress-ja-varmuuskopiointi.md).
+Seuraavaksi: [5. wordpress ja varmuuskopiointi](./05-wordpress-ja-varmuuskopiointi.md).
