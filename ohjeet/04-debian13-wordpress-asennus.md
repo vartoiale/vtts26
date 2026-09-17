@@ -5,7 +5,7 @@ Nämä ohjeet on kopioitu pitkälti debianin wikistä löytyvistä [wordpress:in
 Niitä on muokattu siten, että ne sisältävät ne muutokset, 
 joita tarvitaan wordpress:in asentamiseen paikalliselle kehityspalvelimelle.
 
-Muutokset on erikseen listattu [04a](./04a-debian13-wordpress-asennus.md)-ohjetiedostossa.
+Muutokset on erikseen listattu [laajennetuissa versiossa 4-ohjeesta](./laajemmat-ohjeet/04-debian13-wordpress-asennus.md)-ohjetiedostossa.
 
 ## Pakettien asennus
 
