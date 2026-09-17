@@ -12,11 +12,32 @@ Jos sinun pitää muodostaa ssh-yhteys internetin yli palvelimeen,
 varmista, että teet sen tietoturvallisesti. 
 Tällöin kannattaa käyttää apuna vpn ratkaisuja, kuten esimerkiksi tailscale:a.
 
+## esivalmistelu: asennetaan tarvittavat paketit debian-palvelimelle
+
+Asennetaan `net-tools`, paketti, jotta saadaan myöhemmin tarvittava `ifconfig`-työkalu käyttöön:
+
+```sh
+sudo apt install net-tools
+```
+
+Asennetaan ssh-palvelin debianille (`openssh-server`-paketti pitää sisällään openssh-paketin):
+
+```sh
+sudo apt update
+sudo apt install openssh-server
+```
+
+Nyt et enää tarvitse tämän ohjeen seuraamiseen internet-yhteyttä palvelimen koneella.
+
+
+## Koneiden liittäminen ethernet-kaapelilla
+
+Voit nyt:
+
+1. ottaa internet-yhteyden tuovan ethernet-kaapelin irti palvelimesta,
+2. yhdistää palvelimen ja läppärin toisiinsa ethernet-kaapelilla.
+
 ## Asetusten määritys yhteyden muodostamista varten
-
-### Koneiden liittäminen ethernet-kaapelilla
-
-Liitä palvelin ethernet-kaapelilla läppäriin.
 
 ### Debian-palvelimen asetusten määritys
 
@@ -41,12 +62,6 @@ Käynnistetään ethernet-sovitin:
 sudo ip link set enp1s0 up
 ```
 
-Asennetaan `net-tools`, paketti, jotta saadaan `ifconfig`-työkalu käyttöön:
-
-```sh
-sudo apt install net-tools
-```
-
 Tarkistetaan, että ip-osoite on käytössä `enp1s0`-sovittimella:
 
 ```sh
@@ -56,14 +71,7 @@ sudo ifconfig
 Tulosteessa ethernet-sovittimen osoitteen pitäisi nyt olla `192.168.50.2`, 
 ja aliverkon peitteen `255.255.255.0`.
 
-### ssh-palvelimen asennus debian-palvelimelle
-
-Asenna ssh-palvelin debianille (`openssh-server`-paketti pitää sisällään openssh-paketin):
-
-```sh
-sudo apt update
-sudo apt install openssh-server
-```
+### ssh-palvelimen käyttöönotto
 
 Otetaan ssh-palvelin käyttöön:
 
@@ -138,3 +146,9 @@ Tämän jälkeen avautuvassa ikkunassa on:
 * oikealla puolella debian-palvelimen tiedostojärjestelmä.
 
 Siirrä varmuuskopio talteen palvelimelta, luokan läppärille, haluamaasi kansioon.
+
+## Lopuksi
+
+Olet nyt saanut siirrettyä varmuuskopiosi toiselle laitteelle.
+
+Voit nyt vaihtaa alkuperäisen ethernet-kaapelin takaisin, jotta pääset palvelimella internetiin.
