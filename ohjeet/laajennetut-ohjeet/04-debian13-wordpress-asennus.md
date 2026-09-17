@@ -1,4 +1,4 @@
-# Ohje 4: Wordpressin asennus debian 13 (trixie) -käyttöjärjestelmään
+# Laajennettu ohje 4: Wordpressin asennus debian 13 (trixie) -käyttöjärjestelmään
 
 ## Helpompi ohje
 
