@@ -1,4 +1,4 @@
-# Wordpress ja varmuuskopiot
+# Ohje 5: Wordpress ja varmuuskopiot
 
 Kun olemme saaneet wordpressin asennettua, seuraavaksi on tarpeen opetella varmuuskopioiden tekeminen.
 
