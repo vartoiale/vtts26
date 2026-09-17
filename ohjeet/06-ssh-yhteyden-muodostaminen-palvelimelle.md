@@ -1,16 +1,20 @@
-# Ohje 6: 
-
-Tässä ohjeessa luodaan ethernet-kaapelia käyttäen yhteys 
-luokassa sijaitsevan palvelimen ja luokassa sijaitsevan läppärin välille.
+# Ohje 6: ssh-yhteyden muodostaminen palvelimelle, ja varmuuskopioiden lataaminen talteen läppärille
 
 ## Huomautus liittyen tietoturvaan
 
 Tämä ohje on tarkoitettu käytettäväksi vain luokassa käytettävillä palvelimilla, 
-ja luokan labrakoneilla, eikä sen tietoturvaominaisuuksiin ole kiinnitetty huomiota.
+eikä sen tietoturvaominaisuuksiin ole kiinnitetty huomiota.
 
 Jos sinun pitää muodostaa ssh-yhteys internetin yli palvelimeen, 
 varmista, että teet sen tietoturvallisesti. 
-Tällöin kannattaa käyttää apuna vpn ratkaisuja, kuten esimerkiksi tailscale:a.
+Tällöin kannattaa käyttää apuna vpn-ratkaisuja, kuten esimerkiksi tailscale:a.
+
+## alkutilanne
+
+Tässä oletetaan seuraava lähtötilanne:
+
+* Sekä debian-palvelin, että läppäri on kiinnitetty samaan kytkimeen, ja ovat näin ollen samassa lähiverkossa.
+* Molemmat koneet saavat kytkimeltä dhcp-protokollan avulla dynaamisesti ip-osoitteen, ja ovat samassa aliverkossa.
 
 ## esivalmistelu: asennetaan tarvittavat paketit debian-palvelimelle
 
@@ -32,49 +36,7 @@ Asennetaan ssh-palvelin debianille (`openssh-server`-paketti pitää sisällää
 sudo apt install openssh-server
 ```
 
-Nyt et enää tarvitse tämän ohjeen seuraamiseen internet-yhteyttä palvelimen koneella.
-
-
-## Koneiden liittäminen ethernet-kaapelilla
-
-Voit nyt:
-
-1. ottaa internet-yhteyden tuovan ethernet-kaapelin irti palvelimesta,
-2. yhdistää palvelimen ja läppärin toisiinsa ethernet-kaapelilla.
-
 ## Asetusten määritys yhteyden muodostamista varten
-
-### Debian-palvelimen asetusten määritys
-
-Tarkista koneen ethernet-sovittimen nimi:
-
-```sh
-ip link
-```
-
-Ethernet-sovittimen nimi vaihtelee koneen mukaan, mutta se on muotoa `enp1s0`.
-
-Tämän jälkeen, asetetaan koneelle manuaalisesti ip-osoite, 
-oletetaan sovittimen nimen olevan `enp1s0`:
-
-```sh
-sudo ip addr add 192.168.50.2/24 dev enp1s0
-```
-
-Käynnistetään ethernet-sovitin:
-
-```sh
-sudo ip link set enp1s0 up
-```
-
-Tarkistetaan, että ip-osoite on käytössä `enp1s0`-sovittimella:
-
-```sh
-sudo ifconfig
-```
-
-Tulosteessa ethernet-sovittimen osoitteen pitäisi nyt olla `192.168.50.2`, 
-ja aliverkon peitteen `255.255.255.0`.
 
 ### ssh-palvelimen käyttöönotto
 
@@ -93,19 +55,38 @@ sudo systemctl status ssh
 tämän `status`-komennon pitäisi näyttää, että ssh-palvelin on aktiivinen, 
 ja kuuntelee porttia `22`.
 
-### ip-osoitteen määrittäminen windows-koneella
+### ssh-palvelimen ip-osoitteen selvittäminen
 
-Käynnistä windows:in asetukset. 
-Siellä siirry Asetukset -> verkko ja internet -> ethernet -> ip-määritys -> muokkaa.
+Jotta voimme ottaa läppäriltä etäyhteyden debian-palvelimelle, 
+meidän pitää ensin palvelimella selvittää, minkä ip-osoitteen se on saanut dhcp-palvelimelta.
 
-Aseta:
+Palvelimella aja komento:
 
-* alasveto valikosta valitse "manuaalinen",
-* ipv4: "käytössä",
-* ip-osoite: "192.168.50.1",
-* aliverkon peite: "255.255.255.0",
-* yhdyskäytävä: tyhjä,
-* ensisijainen dns: tyhjä.
+```sh
+sudo ifconfig
+```
+
+Tämä listaa yhden tai useamman verkkosovittimen (engl. Network Interface Card, NIC), 
+sekä niiden asetukset.
+
+Nämä ovat muotoa: `sovittimen nimi: pitkä lista asetuksia`
+
+Tyypillisesti listalta löytyy ns. virtuaalinen loopback-laite (nimi yleensä `lo`), mahdollinen langaton sovitin (nimi alkaa yleensä `w`), sekä todennäköisesti langallinen ethernet-sovitin (nimi alkaa `en`).
+
+Tässä yhteydessä olemme kiinnostuneita langallisesta ethernet-sovittimesta.
+
+Sen nimi alkaa merkeillä `en` (ethernet).
+
+Ethernet-sovittimen asetuksista löytyy kenttä `inet` ja sitä seuraa IPv4 osoite (esim. `192.168.101.1`). 
+Tämä on palvelimen ip-osoite lähiverkossa, ja se tarvitaan, jotta pystymme ottamaan palvelimeen yhteyden läppäriltä.
+
+_Debianin verkkosovittimien nimeämiskäytännöistä löytyy kiinnostuneille oma artikkelinsa debianin wikistä:
+
+* [NetworkInterfaceNames](https://wiki.debian.org/NetworkInterfaceNames)_
+
+Systemd:n vastaava dokumentaatio:
+
+* [Predictable Network Interface Names](https://systemd.io/PREDICTABLE_INTERFACE_NAMES/)
 
 ## Yhteyden muodostus windows-koneelta debian-palvelimelle
 
@@ -114,13 +95,22 @@ Aseta:
 Käynnistä windows-läppärillä `cmd`, ja suorita komento:
 
 ```cmd
+ping <palvelimen IPv4-osoite>
+```
+
+Eli jos palvelimen ip-osoite olisi edellisessä kohdassa ollut `192.168.50.2`, tämä komento näyttäisi seuraavalta:
+
+```cmd
 ping 192.168.50.2
 ```
 
-Tämä on palvelimelle asetettu osoite, ja ping yrittää neljästi ottaa debian-palvelimelle yhteyden.
+Windowsin komentokehotteessa suoritettuna, ping yrittää neljästi ottaa debian-palvelimelle yhteyden.
 
 Kaikki on hyvin, jos ping palauttaa neljä riviä, joista ainakin yksi alkaa sanoilla "reply from".
 Tällöin ping on onnistunut löytämään debian-palvelimemme.
+
+Jos ping ei palauta vastausta palvelimelta, jotain on pielessä. 
+Tällöin kannattaa tarkistaa, että kaikki ethernet-kaapelit ovat kiinni, vieläpä samassa kytkimessä, ja olet kirjoittanut ip-osoitteen oikein.
 
 ### Asenna luokan windows-läppärille tarvittavat ohjelmat
 
@@ -136,12 +126,12 @@ Pura lataamasi zip, ja käynnistä winscp-sovellus.
 
 Sovelluksen käynnistyttyä tulee näkyviin login-ikkuna.
 
-Syötä:
+Syötä kirjutumisikkunassa:
 
-* hostname: `192.168.50.2` - tämä on debian-palvelimen osoite,
+* hostname: `<debian-palvelimen IPv4-osoite>` - tämä on debian-palvelimen osoite, jonka sait aiemmin `sudo ifconfig`-komennolla,
 * port number: `22`,
-* user name: `<debian-palvelimen käyttäjän nimi>`,
-* password: `<debian-palvelimen käyttäjän salasana>`.
+* user name: `<debian-palvelimen käyttäjän nimi>` (voit jättää myös tyhjäksi, jolloin sitä kysytään myöhemmin),
+* password: `<debian-palvelimen käyttäjän salasana>` (voit jättää myös tyhjäksi, jolloin sitä kysytään myöhemmin).
 
 Klikkaa login.
 
@@ -150,7 +140,15 @@ Tämän jälkeen avautuvassa ikkunassa on:
 * vasemmalla puolella läppärin tiedostojärjestelmä, ja
 * oikealla puolella debian-palvelimen tiedostojärjestelmä.
 
-Siirrä varmuuskopio talteen palvelimelta, luokan läppärille, haluamaasi kansioon.
+Siirrä varmuuskopio talteen palvelimelta, läppärille, haluamaasi kansioon.
+
+Koska tulet tekemään useita varmuuskopioiden tallennuksia, 
+kannattaa lisätä varmuuskopioinnin päivämäärä joko:
+
+a. tiedoston nimeen, tai 
+b. luoda erillinen päivämäärän sisältävä kansio, johon tiedostot tallennat.
+
+Näin pystyt helposti löytämään tiettynä ajankohtana tehdyn varmuuskopion nimen perusteella.
 
 ## Lopuksi
 
