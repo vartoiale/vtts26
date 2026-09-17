@@ -4,7 +4,7 @@
 
 Helpompi ohje löytyy osoitteesta:
 
-* [Ohje 4B: Wordpressin asennus debian 13 (trixie) -käyttöjärjestelmään](../04-debian13-wordpress-asennus.md)
+* [Ohje 4: Wordpressin asennus debian 13 (trixie) -käyttöjärjestelmään](../04-debian13-wordpress-asennus.md)
 
 Yllä oleva ohje on muokattu versio debianin omasta ohjeesta,
 johon on lisätty mukaan ne asiat,
