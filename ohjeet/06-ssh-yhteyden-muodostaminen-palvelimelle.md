@@ -14,6 +14,12 @@ Tällöin kannattaa käyttää apuna vpn ratkaisuja, kuten esimerkiksi tailscale
 
 ## esivalmistelu: asennetaan tarvittavat paketit debian-palvelimelle
 
+Päivitä tieto uusimmista saatavilla olevista paketeista:
+
+```sh
+sudo apt update
+```
+
 Asennetaan `net-tools`, paketti, jotta saadaan myöhemmin tarvittava `ifconfig`-työkalu käyttöön:
 
 ```sh
@@ -23,7 +29,6 @@ sudo apt install net-tools
 Asennetaan ssh-palvelin debianille (`openssh-server`-paketti pitää sisällään openssh-paketin):
 
 ```sh
-sudo apt update
 sudo apt install openssh-server
 ```
 
