@@ -456,3 +456,7 @@ Voit testata, että kaikki toimii, tarkastamalla sivustosi toiminnan selaimessa 
 * `http://localhost` - (paikallisesti) julkaistu sivusto
 
 Nyt voit taas jatkaa wordpress:in käyttöä, kuin varmuuskopiota ei olisi koskaan tapahtunut.
+
+## Seuraavaksi
+
+Seuraavaksi tallennetaan varmuuskopio läppärille ssh-yhteyden avulla: [Ohje 6: ssh-yhteyden muodostaminen palvelimelle](./06-ssh-yhteyden-muodostaminen-palvelimelle.md)
