@@ -249,7 +249,7 @@ Teemme tämän tilapäisen ratkaisun, jotta meidän ei tarvitse määrittää sq
 Lisää tiedostoon seuraavat rivit:
 
 ```sql
-CREATE USER wordpress@localhost IDENTIFIED BY `password`;
+CREATE USER wordpress@localhost IDENTIFIED BY 'password';
 CREATE DATABASE wordpress;
 GRANT SELECT,INSERT,UPDATE,DELETE,CREATE,DROP,ALTER,LOCK TABLES
 ON wordpress.*
@@ -284,6 +284,38 @@ Sen avulla luemme ensin `cat ~/wp.sql` komennolla aiemmin luomamme tiedoston sis
 ja `|`-putkioperaattorin avulla annamme sen edelleen `sudo mysql --defaults-extra-file=/etc/mysql/debian.cnf`-komennolle.
 
 Jos kaikki on mennyt oikein, meillä pitäisi nyt olla toimiva versio wordpress:istä asennettuna.
+
+Jos saat virheviestin, tarkista kirjoititko kaiken oikein `~/wp.sql`-tiedostoon.
+
+##### Debuggaus: kun `mysql`-komento valittaa, että `CREATE user` epäonnistuu
+
+Jos edellisen vaiheen lopussa `mysql`-komento valittaa virheestä, jonka korjasit,
+ja nyt se valittaa `CREATE user`-osion epäonnistuvan, joudumme nyt tekemään muita korjauksia.
+
+Jos kirjoitusvirheesi oli sql-tiedoston lopussa, on mahdollista, että sql-komennoista ensimmäinen (wordpress-käyttäjän luonti) onnistui ensimmäisellä kerralla,
+mutta uudella yrittämällä se ei enää onnistu (koska käyttäjä luotiin jo ensimmäisellä kerralla).
+
+Tähän on muutama eri ratkaisu:
+
+1. poista wordpress-käyttäjä käsin tietokannasta,
+2. poista koko tietokanta.
+
+Tällä kertaa teemme helpomman vaihtoehdon, ja poistamme koko tietokannan.
+Teemme näin, lähinnä sen takia, etteivät sql-kielen perusteet mahdu tämän tutkinnon osan sisältöihin.
+
+Voit alustaa koko tietokannan seuraavalla komennolla (mutta huomioi, että se kannattaa tehdä vain näin alussa, kun wordpress:iin ei ole vielä luotu sisältöä, koska myös wordpressin sisältö poistuu seuraavalla komennolla):
+
+```sh
+sudo systemctl stop mysql
+sudo rm -rf /var/lib/mysql/*
+sudo -u mysql mysql_install_db
+sudo systemctl start mysql
+```
+
+Tämän jälkeen mariadb-tietokannan piätisi olla palautettu tehdasasetuksiin, 
+ja voit ajaa uudelleen aiemman putkitetun mysql-komennon yläpuolelta.
+
+Toista tätä (korjaa,suorita,alusta) -looppia, niin kauan, että msql-komento menee läpi ilman virheitä.
 
 ## Wordpress:in käyttöönotto
 
